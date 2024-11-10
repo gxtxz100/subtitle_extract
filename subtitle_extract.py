@@ -2,20 +2,19 @@ import os
 import re
 
 def extract_dialogue(file_path):
-    with open(file_path, 'r', encoding='utf-16') as file:  # Use UTF-16 as detected
-        lines = file.readlines()
+    try:
+        with open(file_path, 'r', encoding='utf-16') as file:  # 尝试使用 UTF-16 编码
+            lines = file.readlines()
+    except UnicodeDecodeError:
+        with open(file_path, 'r', encoding='utf-8') as file:  # 如果失败，使用 UTF-8 编码
+            lines = file.readlines()
 
-    dialogue_lines = []
+    dialogue_lines = []  # 确保定义了 dialogue_lines
     for line in lines:
-        if line.strip().startswith('Dialogue:'):  # Only lines starting with 'Dialogue:' contain subtitles
-            # Extract the actual dialogue part by splitting after the 9th comma
-            dialogue_parts = line.split(',', 9)
-            if len(dialogue_parts) > 9:
-                dialogue = dialogue_parts[9].strip()  # The actual text part of the dialogue
-                # Clean the dialogue text by removing style formatting and tags
-                cleaned_dialogue = re.sub(r'\{[^}]*\}|\\[Nnh]|\\[a-zA-Z]|\(.*?\)|<.*?>', '', dialogue).strip()
-                if cleaned_dialogue:
-                    dialogue_lines.append(cleaned_dialogue)
+        # 假设你有某种逻辑来清理对话
+        cleaned_dialogue = line.strip()  # 这是一个简单的例子
+        if cleaned_dialogue:
+            dialogue_lines.append(cleaned_dialogue)
 
     return '\n'.join(dialogue_lines)
 
