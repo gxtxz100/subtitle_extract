@@ -31,6 +31,8 @@ def extract_dialogues(file_path):
                 dialogue = match.group(1).strip()
                 # 清理ASS标签
                 dialogue = re.sub(r'\{[^}]*\}', '', dialogue)
+                # 替换/N为六个空格
+                dialogue = dialogue.replace(r'\N', '      ')
                 if dialogue:
                     dialogues.append(dialogue)
 
